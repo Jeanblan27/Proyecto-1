@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cr.ac.una.eif206</groupId>
+    <artifactId>proyecto1-sistema-reservas</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Proyecto 1 - Sistema de Reserva de Recursos</name>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Versiones centralizadas: si hay que actualizar una
+             dependencia, se cambia aquí una sola vez. -->
+        <junit.version>5.10.2</junit.version>
+        <pdfbox.version>3.0.3</pdfbox.version>
+        <surefire.version>3.2.5</surefire.version>
+        <failsafe.version>3.2.5</failsafe.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- JUnit Jupiter: sirve tanto para pruebas de unidad (Surefire)
+             como de integración (Failsafe). El enunciado exige ambas. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Apache PDFBox: generación de los reportes en PDF que exige
+             el enunciado en todas las funcionalidades. Licencia Apache
+             2.0 (sin las restricciones AGPL que tiene iText). -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>${pdfbox.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <!-- NOTA IMPORTANTE PARA EL EQUIPO:
+             El código fuente actual vive en "src/" directamente (no en
+             "src/main/java/", que es lo que Maven espera por defecto).
+             Para no tener que mover todos los archivos y romper los
+             imports del proyecto, se le indica a Maven explícitamente
+             dónde está el código fuente con <sourceDirectory>.
+
+             Los tests SÍ van en la ubicación estándar de Maven:
+             src/test/java/ (no se personalizó esa ruta). Ahí es donde
+             debe ir cada *Test.java (unidad) y *IT.java (integración). -->
+        <sourceDirectory>src</sourceDirectory>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+
+            <!-- Pruebas de UNIDAD: corren con "mvn test".
+                 Busca por defecto clases llamadas *Test.java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+
+            <!-- Pruebas de INTEGRACIÓN: corren con "mvn verify".
+                 Busca por defecto clases llamadas *IT.java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Opcional, solo por comodidad: permite correr el programa
+                 con "mvn compile exec:java" sin tener que armar un jar. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <mainClass>Main</mainClass>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
