@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<funcionarios>
+    <funcionario>
+        <id>123</id>
+        <nombre>german</nombre>
+        <clave>123</clave>
+        <telefono>88888888</telefono>
+        <rol>ADMIN</rol>
+    </funcionario>
+    <funcionario>
+        <id>009</id>
+        <nombre>juan</nombre>
+        <clave>54321</clave>
+        <telefono>22222222</telefono>
+        <rol>FUNCIONARIO</rol>
+    </funcionario>
+    <funcionario>
+        <id>1234</id>
+        <nombre>pedro</nombre>
+        <clave>1234</clave>
+        <telefono>00000000</telefono>
+        <rol>FUNCIONARIO</rol>
+    </funcionario>
+</funcionarios>

@@ -71,17 +71,23 @@ public class ControladorLogin {
             System.exit(0);
         });
         vista.getBotonCambiarClave().addActionListener(e -> {
-            String clave = " ";
-            String id = " ";
-                clave = String.valueOf(vista.getClave());
-                id = String.valueOf(vista.getId());
-                if(modelo.existeFuncionario(clave, id)){
-                    CambiarClave nuevaClave = new CambiarClave();
-                    ControladorClave controladorClave = new ControladorClave(modelo,nuevaClave);
-                    nuevaClave.mostrar();
-                }else {
-                    JOptionPane.showMessageDialog(null, "Clave o ID incorrecto");
-                }
+
+            String clave = String.valueOf(vista.getClave());
+            String id = String.valueOf(vista.getId());
+
+            if (modelo.existeFuncionario(clave, id)) {
+
+                Funcionario funcionario = modelo.buscarfuncionario(id);
+
+                CambiarClave nuevaClave = new CambiarClave();
+
+                ControladorClave controladorClave =
+                        new ControladorClave(modelo, nuevaClave, funcionario);
+                nuevaClave.mostrar();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Clave o ID incorrecto");
+            }
         });
     }
 }
