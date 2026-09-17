@@ -45,12 +45,7 @@ public class ControladorLogin {
                     if(funcionario.getRol().equals(Rol.ADMIN)) {
 
                         SistemaDeReservas reserva = new SistemaDeReservas();
-                        ControladorSistemaDeReservas controladoraReserva = new ControladorSistemaDeReservas(
-                                        reserva,
-                                        modelo,
-                                        modeloCategorias,
-                                        modeloRecursos
-                        );
+                        ControladorSistemaDeReservas controladoraReserva = new ControladorSistemaDeReservas(reserva, modelo, modeloCategorias, modeloRecursos, modeloReservas);
                         reserva.mostrar();
                         vista.dispose();
                     }else {

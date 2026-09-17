@@ -32,6 +32,7 @@ public class Reserva {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.recursos = recursos;
+        this.estado = Estado.ACTIVA;
     }
 
     public int getId() {

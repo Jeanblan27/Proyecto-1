@@ -4,7 +4,9 @@ import Presentation.Controller.ControladorPaneles.*;
 import Presentation.Model.Funcionario.ListaFuncionarios;
 import Presentation.Model.Categoria.ListaCategorias;
 import Presentation.Model.Recurso.ListaRecursos;
+import Presentation.Model.Reserva.ListaReservas;
 import Presentation.View.PanelsDeReservas.SistemaDeReservas.SistemaDeReservas;
+import Presentation.Model.Reserva.ListaReservas;
 
 public class ControladorSistemaDeReservas {
 
@@ -12,6 +14,7 @@ public class ControladorSistemaDeReservas {
     private ListaFuncionarios modelo;
     private ListaCategorias modeloCategoria;
     private ListaRecursos modeloRecursos;
+    private ListaReservas modeloReservas;
 
     private ControladoraFuncionarios controladorFuncionarios;
     private ControladoraCategorias controladoraCategorias;
@@ -24,17 +27,20 @@ public class ControladorSistemaDeReservas {
             SistemaDeReservas vista,
             ListaFuncionarios modelo,
             ListaCategorias modeloCategoria,
-            ListaRecursos modeloRecursos) {
+            ListaRecursos modeloRecursos,
+            ListaReservas modeloReservas) {
 
         this.vista = vista;
         this.modelo = modelo;
         this.modeloCategoria = modeloCategoria;
         this.modeloRecursos = modeloRecursos;
+        this.modeloReservas = modeloReservas;
 
         iniciarListenerPaneles();
         iniciarControladorFuncionarios();
         iniciarControladorCategorias();
         iniciarControladorRecursos();
+        iniciarControladorEstadisticas();
     }
 
     private void iniciarControladorFuncionarios() {
@@ -57,6 +63,10 @@ public class ControladorSistemaDeReservas {
     }
     private void iniciarControladorCalendarizacion() {
 
+    }
+
+    private void  iniciarControladorEstadisticas() {
+        controladorEstadisticas = new ControladorEstadisticas(vista.getPanelEstadisticas(), modeloReservas);
     }
 
     private void iniciarListenerPaneles() {

@@ -39,6 +39,7 @@ public class ControladorSistemaReservaFuncionario {
         iniciarListenerPaneles();
         iniciarControladorReservas();
         iniciarControladorCalendarizacion();
+        iniciarControladorEstadisticas();
     }
 
 
@@ -46,7 +47,11 @@ public class ControladorSistemaReservaFuncionario {
         controladorCalendarizacion = new ControladorCalendarizacion(vista.getPanelCalendarizacion(), modeloCategoria,modeloRecursos, modelo);
     }
     private void iniciarControladorEstadisticas() {
-
+        controladorEstadisticas =
+                new ControladorEstadisticas(
+                        vista.getPanelEstadisticas(),
+                        modelo
+                );
     }
     private void iniciarControladorActividades() {
 
