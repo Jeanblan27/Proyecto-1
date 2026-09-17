@@ -1,7 +1,9 @@
 package Presentation.Model.Reserva;
 
 import Presentation.Model.Funcionario.Funcionario;
+import Presentation.Model.Funcionario.ListaFuncionarios;
 import Presentation.Model.Recurso.Recurso;
+import Presentation.Model.Recurso.ListaRecursos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,44 +12,99 @@ import java.util.ArrayList;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
 
+import Data.ReservaXML;
+
 public class ListaReservas {
 
     private ArrayList<Reserva> reservas;
     private int siguienteId;
+    private ReservaXML almacenamiento;
     private PropertyChangeSupport soporte;
 
-    public ListaReservas() {
-        reservas = new ArrayList<>();
-        siguienteId = 1;
+    // =========================
+    // CONSTRUCTOR
+    // =========================
+
+    public ListaReservas(
+            ListaFuncionarios listaFuncionarios,
+            ListaRecursos listaRecursos) {
+
         soporte = new PropertyChangeSupport(this);
+
+        almacenamiento = new ReservaXML();
+
+        reservas = new ArrayList<>(almacenamiento.cargar(listaFuncionarios, listaRecursos));
+
+        // El siguiente ID empieza en 1
+        siguienteId = 1;
+
+        // Buscar el siguiente ID disponible
+        for (Reserva reserva : reservas) {
+
+            if (reserva.getId() >= siguienteId) {
+
+                siguienteId =
+                        reserva.getId() + 1;
+            }
+        }
     }
+
     // =========================
     // AGREGAR RESERVA
+    // =========================
+
     public void agregarReserva(Reserva reserva) {
 
         reservas.add(reserva);
+
+        // Guardar en XML
+        almacenamiento.guardar(reservas);
+
+        soporte.firePropertyChange(
+                "agregado",
+                null,
+                reserva
+        );
     }
+
+    // =========================
+    // OBTENER RESERVAS
+    // =========================
 
     public ArrayList<Reserva> getReservas() {
 
         return reservas;
     }
-    //
+
+    // =========================
+    // GENERAR ID
+    // =========================
+
     public int generarId() {
+
         return siguienteId++;
     }
+
+    // =========================
+    // BUSCAR RESERVA
+    // =========================
 
     public Reserva buscarReserva(int id) {
 
         for (Reserva reserva : reservas) {
 
             if (reserva.getId() == id) {
+
                 return reserva;
             }
         }
 
         return null;
     }
+
+    // =========================
+    // MODIFICAR RESERVA
+    // =========================
 
     public boolean modificarReserva(
             int id,
@@ -69,11 +126,24 @@ public class ListaReservas {
             reserva.setHoraFin(horaFin);
             reserva.setRecursos(recursos);
 
+            // Guardar cambios en XML
+            almacenamiento.guardar(reservas);
+
+            soporte.firePropertyChange(
+                    "modificado",
+                    null,
+                    reserva
+            );
+
             return true;
         }
 
         return false;
     }
+
+    // =========================
+    // CANCELAR RESERVA
+    // =========================
 
     public boolean cancelarReserva(int id) {
 
@@ -82,11 +152,25 @@ public class ListaReservas {
         if (reserva != null) {
 
             reserva.setEstado(Estado.CANCELADA);
+
+            // Guardar cancelación en XML
+            almacenamiento.guardar(reservas);
+
+            soporte.firePropertyChange(
+                    "cancelado",
+                    null,
+                    reserva
+            );
+
             return true;
         }
 
         return false;
     }
+
+    // =========================
+    // VERIFICAR DISPONIBILIDAD
+    // =========================
 
     public boolean recursoDisponible(
             Recurso recurso,
@@ -96,6 +180,7 @@ public class ListaReservas {
 
         for (Reserva reserva : reservas) {
 
+            // Las canceladas no bloquean recursos
             if (reserva.getEstado() == Estado.CANCELADA) {
                 continue;
             }
@@ -110,15 +195,23 @@ public class ListaReservas {
 
             boolean hayCruce =
                     horaInicio.isBefore(reserva.getHoraFin())
-                            && horaFin.isAfter(reserva.getHoraInicio());
+                            && horaFin.isAfter(
+                            reserva.getHoraInicio()
+                    );
 
             if (hayCruce) {
+
                 return false;
             }
         }
 
         return true;
     }
+
+    // =========================
+    // RECURSO ESTA RESERVADO
+    // =========================
+
     public boolean recursoEstaReservado(
             Recurso recurso,
             LocalDate fecha,
@@ -126,6 +219,11 @@ public class ListaReservas {
             LocalTime horaFin) {
 
         for (Reserva reserva : reservas) {
+
+            // Las canceladas no cuentan
+            if (reserva.getEstado() == Estado.CANCELADA) {
+                continue;
+            }
 
             // Si es otra fecha, no hay conflicto
             if (!reserva.getFecha().equals(fecha)) {
@@ -139,8 +237,10 @@ public class ListaReservas {
                 if (r.getId() == recurso.getId()) {
 
                     // ¿Se cruzan los horarios?
-                    if (horaInicio.isBefore(reserva.getHoraFin())
-                            && horaFin.isAfter(reserva.getHoraInicio())) {
+                    if (horaInicio.isBefore(
+                            reserva.getHoraFin())
+                            && horaFin.isAfter(
+                            reserva.getHoraInicio())) {
 
                         return true;
                     }
@@ -150,11 +250,17 @@ public class ListaReservas {
 
         return false;
     }
+
+    // =========================
+    // BUSCAR RESERVAS EN HORA
+    // =========================
+
     public ArrayList<Reserva> buscarReservasEnHora(
             LocalDate fecha,
             LocalTime hora) {
 
-        ArrayList<Reserva> reservasEncontradas = new ArrayList<>();
+        ArrayList<Reserva> reservasEncontradas =
+                new ArrayList<>();
 
         for (Reserva reserva : reservas) {
 
@@ -168,7 +274,8 @@ public class ListaReservas {
                 continue;
             }
 
-            // Comprobar si la hora está dentro de la reserva
+            // Comprobar si la hora está dentro
+            // de la reserva
             if (!hora.isBefore(reserva.getHoraInicio())
                     && hora.isBefore(reserva.getHoraFin())) {
 
@@ -178,6 +285,12 @@ public class ListaReservas {
 
         return reservasEncontradas;
     }
+
+    // =========================
+    // BUSCAR RESERVA DE RECURSO
+    // EN UNA HORA
+    // =========================
+
     public Reserva buscarReservaEnHora(
             Recurso recurso,
             LocalDate fecha,
@@ -195,12 +308,14 @@ public class ListaReservas {
                 continue;
             }
 
-            // Comprobar si el recurso pertenece a la reserva
+            // Comprobar si el recurso pertenece
+            // a la reserva
             if (!reserva.getRecursos().contains(recurso)) {
                 continue;
             }
 
-            // Comprobar si la hora está dentro de la reserva
+            // Comprobar si la hora está dentro
+            // de la reserva
             if (!hora.isBefore(reserva.getHoraInicio())
                     && hora.isBefore(reserva.getHoraFin())) {
 
@@ -210,10 +325,20 @@ public class ListaReservas {
 
         return null;
     }
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+    // =========================
+    // PROPERTY CHANGE
+    // =========================
+
+    public void addPropertyChangeListener(
+            PropertyChangeListener listener) {
+
         soporte.addPropertyChangeListener(listener);
     }
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
+
+    public void removePropertyChangeListener(
+            PropertyChangeListener listener) {
+
         soporte.removePropertyChangeListener(listener);
     }
 }

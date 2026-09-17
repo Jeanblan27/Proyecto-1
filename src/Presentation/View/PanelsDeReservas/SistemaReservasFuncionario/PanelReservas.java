@@ -422,7 +422,26 @@ public class PanelReservas extends JPanel {
 
         listaCategorias.clearSelection();
     }
+    public void seleccionarCategorias(List<Categoria> categorias) {
 
+        listaCategorias.clearSelection();
+
+        for (int i = 0; i < modeloCategorias.size(); i++) {
+
+            Categoria categoriaLista =
+                    modeloCategorias.getElementAt(i);
+
+            for (Categoria categoriaSeleccionada : categorias) {
+
+                if (categoriaLista.getId()
+                        == categoriaSeleccionada.getId()) {
+
+                    listaCategorias.addSelectionInterval(i, i);
+                    break;
+                }
+            }
+        }
+    }
 
     // ==========================================
     // GETTERS

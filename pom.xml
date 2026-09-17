@@ -22,6 +22,7 @@
         <pdfbox.version>3.0.3</pdfbox.version>
         <surefire.version>3.2.5</surefire.version>
         <failsafe.version>3.2.5</failsafe.version>
+        <openai.version>4.63.3</openai.version>
     </properties>
 
     <dependencies>
@@ -42,6 +43,12 @@
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
             <version>${pdfbox.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.openai</groupId>
+            <artifactId>openai-java</artifactId>
+            <version>${openai.version}</version>
         </dependency>
 
     </dependencies>

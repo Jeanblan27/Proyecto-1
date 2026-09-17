@@ -39,6 +39,8 @@ public class Reserva {
         return id;
     }
 
+    public void setId(int id) { this.id = id; }
+
     public Funcionario getFuncionario() {
         return funcionario;
     }

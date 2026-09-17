@@ -23,7 +23,7 @@ public class Main {
                     new ListaRecursos( modeloCategorias.getCategorias());
 
             ListaReservas modeloReservas =
-                    new ListaReservas();
+                    new ListaReservas(modeloFuncionarios,modeloRecursos);
 
             Login vista = new Login();
 

@@ -17,6 +17,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import Presentation.Model.Reserva.Estado;
+import Logic.DatosReservaIA;
+import Logic.ServicioIA;
 
 public class ControladorReservas implements PropertyChangeListener {
 
@@ -25,6 +28,7 @@ public class ControladorReservas implements PropertyChangeListener {
     private ListaRecursos modeloRecursos;
     private Funcionario funcionario;
     private ListaCategorias modeloCategorias;
+    private ServicioIA servicioIA;
 
     private DateTimeFormatter formatoFecha =
             DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -67,7 +71,12 @@ public class ControladorReservas implements PropertyChangeListener {
         vista.getBotonLimpiar().addActionListener(e ->
                 vista.limpiarFormulario()
         );
-
+        vista.getBotonCancelarReserva().addActionListener(e ->
+                cancelarReserva()
+        );
+        vista.getBotonExtraerIA().addActionListener(e ->
+                extraerConIA()
+        );
         // Cargar las reservas existentes
         // cuando se abre el panel
 
@@ -75,6 +84,79 @@ public class ControladorReservas implements PropertyChangeListener {
         cargarReservas();
     }
 
+    private void extraerConIA() {
+
+        String frase = vista.getCampoFrase()
+                .getText()
+                .trim();
+
+        if (frase.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "Escriba una frase para extraer la información."
+            );
+            return;
+        }
+
+        try {
+
+            if (servicioIA == null) {
+                servicioIA = new ServicioIA();
+            }
+
+            DatosReservaIA datos =
+                    servicioIA.extraerReserva(
+                            frase,
+                            modeloCategorias.getCategorias()
+                    );
+
+            vista.getCampoActividad()
+                    .setText(datos.getActividad());
+
+            vista.getCampoFecha()
+                    .setText(datos.getFecha());
+
+            vista.getCampoHoraInicio()
+                    .setText(datos.getHoraInicio());
+
+            vista.getCampoHoraFin()
+                    .setText(datos.getHoraFin());
+
+            ArrayList<Categoria> categoriasEncontradas =
+                    new ArrayList<>();
+
+            for (String nombreCategoria : datos.getCategorias()) {
+
+                for (Categoria categoria :
+                        modeloCategorias.getCategorias()) {
+
+                    if (categoria.getDescripcion()
+                            .equalsIgnoreCase(
+                                    nombreCategoria.trim())) {
+
+                        categoriasEncontradas.add(categoria);
+                        break;
+                    }
+                }
+            }
+
+            vista.seleccionarCategorias(
+                    categoriasEncontradas
+            );
+
+        } catch (Exception ex) {
+
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "No se pudo utilizar la IA:\n"
+                            + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+            ex.printStackTrace();
+        }
+    }
 
     private void realizarReserva() {
 
@@ -250,11 +332,9 @@ public class ControladorReservas implements PropertyChangeListener {
             );
         }
 
-
-        // =========================
-        // CREAR RESERVA
-        // =========================
-
+// =========================
+// CREAR RESERVA
+// =========================
 
         Reserva reserva = new Reserva(
                 funcionario,
@@ -266,9 +346,18 @@ public class ControladorReservas implements PropertyChangeListener {
         );
 
 
-        // =========================
-        // AGREGAR AL MODELO
-        // =========================
+// =========================
+// GENERAR ID
+// =========================
+
+        int id = modeloReservas.generarId();
+
+        reserva.setId(id);
+
+
+// =========================
+// AGREGAR AL MODELO
+// =========================
 
         modeloReservas.agregarReserva(reserva);
 
@@ -292,7 +381,78 @@ public class ControladorReservas implements PropertyChangeListener {
                 "Reserva realizada correctamente."
         );
     }
+    private void cancelarReserva() {
 
+        int fila = vista.getTablaReservas().getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "Debe seleccionar una reserva para cancelar."
+            );
+            return;
+        }
+
+        String textoId =
+                vista.getTablaReservas().getValueAt(fila, 0).toString();
+
+        int id;
+
+        try {
+            id = Integer.parseInt(textoId);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "No se pudo obtener el ID de la reserva."
+            );
+            return;
+        }
+
+        Reserva reserva = modeloReservas.buscarReserva(id);
+
+        if (reserva == null) {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "La reserva no existe."
+            );
+            return;
+        }
+
+        if (reserva.getEstado() == Presentation.Model.Reserva.Estado.CANCELADA) {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "La reserva ya está cancelada."
+            );
+            return;
+        }
+
+        int respuesta = JOptionPane.showConfirmDialog(
+                vista,
+                "¿Está seguro de que desea cancelar esta reserva?",
+                "Cancelar reserva",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        boolean cancelada = modeloReservas.cancelarReserva(id);
+
+        if (cancelada) {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "Reserva cancelada correctamente."
+            );
+
+            cargarReservas();
+        } else {
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "No se pudo cancelar la reserva."
+            );
+        }
+    }
     private void cargarCategorias() {
 
         vista.cargarCategorias(
