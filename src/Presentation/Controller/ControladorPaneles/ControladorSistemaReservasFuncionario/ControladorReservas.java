@@ -1,13 +1,13 @@
 package Presentation.Controller.ControladorPaneles.ControladorSistemaReservasFuncionario;
 
-import Model.Categoria.Categoria;
-import Model.Funcionario.Funcionario;
-import Model.Recurso.ListaRecursos;
-import Model.Categoria.ListaCategorias;
-import Model.Recurso.Recurso;
-import Model.Reserva.Reserva;
-import View.PanelsDeReservas.SistemaReservasFuncionario.PanelReservas;
-import Model.Reserva.ListaReservas;
+import Presentation.Model.Categoria.Categoria;
+import Presentation.Model.Funcionario.Funcionario;
+import Presentation.Model.Recurso.ListaRecursos;
+import Presentation.Model.Categoria.ListaCategorias;
+import Presentation.Model.Recurso.Recurso;
+import Presentation.Model.Reserva.Reserva;
+import Presentation.View.PanelsDeReservas.SistemaReservasFuncionario.PanelReservas;
+import Presentation.Model.Reserva.ListaReservas;
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

@@ -1,6 +1,6 @@
 package Data;
 
-import Model.Categoria.Categoria;
+import Presentation.Model.Categoria.Categoria;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;

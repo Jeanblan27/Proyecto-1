@@ -150,6 +150,66 @@ public class ListaReservas {
 
         return false;
     }
+    public ArrayList<Reserva> buscarReservasEnHora(
+            LocalDate fecha,
+            LocalTime hora) {
+
+        ArrayList<Reserva> reservasEncontradas = new ArrayList<>();
+
+        for (Reserva reserva : reservas) {
+
+            // Ignorar reservas canceladas
+            if (reserva.getEstado() == Estado.CANCELADA) {
+                continue;
+            }
+
+            // Comprobar la fecha
+            if (!reserva.getFecha().equals(fecha)) {
+                continue;
+            }
+
+            // Comprobar si la hora está dentro de la reserva
+            if (!hora.isBefore(reserva.getHoraInicio())
+                    && hora.isBefore(reserva.getHoraFin())) {
+
+                reservasEncontradas.add(reserva);
+            }
+        }
+
+        return reservasEncontradas;
+    }
+    public Reserva buscarReservaEnHora(
+            Recurso recurso,
+            LocalDate fecha,
+            LocalTime hora) {
+
+        for (Reserva reserva : reservas) {
+
+            // Ignorar reservas canceladas
+            if (reserva.getEstado() == Estado.CANCELADA) {
+                continue;
+            }
+
+            // Comprobar la fecha
+            if (!reserva.getFecha().equals(fecha)) {
+                continue;
+            }
+
+            // Comprobar si el recurso pertenece a la reserva
+            if (!reserva.getRecursos().contains(recurso)) {
+                continue;
+            }
+
+            // Comprobar si la hora está dentro de la reserva
+            if (!hora.isBefore(reserva.getHoraInicio())
+                    && hora.isBefore(reserva.getHoraFin())) {
+
+                return reserva;
+            }
+        }
+
+        return null;
+    }
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         soporte.addPropertyChangeListener(listener);
     }

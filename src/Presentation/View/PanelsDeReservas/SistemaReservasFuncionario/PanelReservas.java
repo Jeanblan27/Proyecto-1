@@ -1,6 +1,6 @@
 package Presentation.View.PanelsDeReservas.SistemaReservasFuncionario;
 
-import Model.Categoria.Categoria;
+import Presentation.Model.Categoria.Categoria;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

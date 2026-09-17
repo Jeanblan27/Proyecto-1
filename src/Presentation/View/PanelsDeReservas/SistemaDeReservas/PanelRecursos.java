@@ -1,5 +1,5 @@
 package Presentation.View.PanelsDeReservas.SistemaDeReservas;
-import Model.Categoria.Categoria;
+import Presentation.Model.Categoria.Categoria;
 
 import java.util.List;
 import javax.swing.*;

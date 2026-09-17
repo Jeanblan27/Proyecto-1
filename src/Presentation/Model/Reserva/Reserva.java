@@ -1,7 +1,7 @@
 package Presentation.Model.Reserva;
 
-import Model.Funcionario.Funcionario;
-import Model.Recurso.Recurso;
+import Presentation.Model.Funcionario.Funcionario;
+import Presentation.Model.Recurso.Recurso;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

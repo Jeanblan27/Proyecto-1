@@ -1,7 +1,10 @@
 
 package Presentation.View.PanelsDeReservas.SistemaDeReservas;
 
-import View.PanelsDeReservas.*;
+import Presentation.View.PanelsDeReservas.PanelActividades;
+import Presentation.View.PanelsDeReservas.PanelCalendarizacion;
+import Presentation.View.PanelsDeReservas.PanelEstadisticas;
+import Presentation.View.PanelsDeReservas.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;

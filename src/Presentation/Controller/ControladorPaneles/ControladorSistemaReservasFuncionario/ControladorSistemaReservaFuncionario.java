@@ -1,14 +1,13 @@
 package Presentation.Controller.ControladorPaneles.ControladorSistemaReservasFuncionario;
 
-
-import Controller.ControladorPaneles.ControladorActividades;
-import Controller.ControladorPaneles.ControladorCalendarizacion;
-import Controller.ControladorPaneles.ControladorEstadisticas;
-import Model.Funcionario.Funcionario;
-import Model.Categoria.ListaCategorias;
-import Model.Recurso.ListaRecursos;
-import Model.Reserva.ListaReservas;
-import View.PanelsDeReservas.SistemaReservasFuncionario.SistemaReservaFuncionario;
+import Presentation.Controller.ControladorPaneles.ControladorActividades;
+import Presentation.Controller.ControladorPaneles.ControladorCalendarizacion;
+import Presentation.Controller.ControladorPaneles.ControladorEstadisticas;
+import Presentation.Model.Funcionario.Funcionario;
+import Presentation.Model.Categoria.ListaCategorias;
+import Presentation.Model.Recurso.ListaRecursos;
+import Presentation.Model.Reserva.ListaReservas;
+import Presentation.View.PanelsDeReservas.SistemaReservasFuncionario.SistemaReservaFuncionario;
 
 public class ControladorSistemaReservaFuncionario {
 
@@ -44,7 +43,7 @@ public class ControladorSistemaReservaFuncionario {
 
 
     private void iniciarControladorCalendarizacion() {
-        controladorCalendarizacion = new ControladorCalendarizacion(vista.getPanelCalendarizacion());
+        controladorCalendarizacion = new ControladorCalendarizacion(vista.getPanelCalendarizacion(), modeloCategoria,modeloRecursos, modelo);
     }
     private void iniciarControladorEstadisticas() {
 

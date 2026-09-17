@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import Model.Funcionario.Rol;
+import Presentation.Model.Funcionario.Rol;
 
 public class PanelFuncionarios extends JPanel {
 

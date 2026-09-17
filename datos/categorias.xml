@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<categorias>
+    <categoria>
+        <id>1</id>
+        <descripcion>laptop</descripcion>
+    </categoria>
+    <categoria>
+        <id>2</id>
+        <descripcion>PC</descripcion>
+    </categoria>
+</categorias>
